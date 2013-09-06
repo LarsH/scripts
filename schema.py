@@ -1,4 +1,4 @@
-#!/it/sw/python/bin/python2.3
+#!/usr/bin/env python
 import urllib
 url = 'http://schema.angstrom.uu.se/4DACTION/iCal_downloadReservations/timeedit.ics?branch=2&lang=1'
 
