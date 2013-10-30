@@ -1,30 +1,18 @@
 #!/usr/bin/env python
 import urllib
-url = 'http://schema.angstrom.uu.se/4DACTION/iCal_downloadReservations/timeedit.ics?branch=2&lang=1'
+from timeEditObfuscation import scramble, unscramble
 
-time = 'from=1134&to=1201'
-l = [78779000, 73832000, 79440000, 78784000, 78861000]
+origurl = 'https://se.timeedit.net/web/uu/db1/schema/s.ics?i=6036X6695055QQ4XZ40X090Y55059W555YY5X67656661WX5X5WW90659557YX66560W604550YX5XZyQ3'
+time = '130826-140124'
 
-time = 'from=1201&to=1234'
-l = [29410000, 78865000, 73921000] #  musik, bildanalys, parallell 
-l += [1789000] # algebra II
-time = 'from=1235&to=1309'
-l = [   78866000, # bildanalys2 uu-12023
-        79447000, # tradlosa sensornaetverk uu-14453
-        79445000, # signalbehandling, uu-14432
-        78858000] # regtek 2
-        #78863000] # fem
+baseurl = origurl.split('?')[0]
+i = origurl.split('=')[-1]
 
-time = 'from=1301&to=1330'
-l = [   78809000, #VHDL
-        69180000, #Operativsystem I
-        78792000, #kryptologi
-        85916000] #dirigering
+origrequest = unscramble(i).split('&')
+objects = [e for e in origrequest if 'objects' in e][0]
 
-ids = ["id%u=%u" % t for t in enumerate(l)]
-url = '&'.join([url, time] + ids)
-
-url = 'https://se.timeedit.net/web/uu/db1/schema/s.ics?i=5XX6Y660W915QYW50X9YQ05Z409505W53XX5335566y655756701W580568'
+query = objects + '&p=' + time
+url = baseurl + '?i=' + scramble(query)
 
 replacements = {
    'Realtidssystem': "Realtid",
@@ -32,14 +20,24 @@ replacements = {
    'Laboration': 'Lab',
    'F\xc3\xb6rel\xc3\xa4sning': 'F\xc3\xb6rel',
    'ITC': 'Pol',
-   '\xc3\x85ngstr\xc3\xb6m': '\xc3\x85ng'
- }
+   '\xc3\x85ngstr\xc3\xb6m': '\xc3\x85ng',
+   'Omtentamen' : 'Omtenta',
+   'Konstantinos Sagonas': 'Kostis',
+   'Martin Blomgren': 'Martin',
+   'Vera Koponen' : 'Vera',
+   'Lektion': 'Lekt',
+   'Grafteori': 'GT',
+   'Diskret matematik': 'Diskret'
+  }
 
 ignores = ['Teknisk fysik 5', 'Masterprogram i datavetenskap',
    'Informationsteknologi', 'Kandidatprogram i Datavetenskap \xc3\x85k 3 dvk',
    '\xc3\xa5k 4', 'Grupp Sy', 'Realtidssystem I',
-   'Masterprogrammet i inbyggda system \xc3\x85r 1', 'Omtentamen',
-   'Martin Stigge', 'Institutionen f\xc3\xb6r informationsteknologi'
+   'Masterprogrammet i inbyggda system \xc3\x85r 1',
+   'Martin Stigge', 'Institutionen f\xc3\xb6r informationsteknologi',
+   'Matematiska institutionen', 'Gymnasiel\xc3\xa4rare Matematik \xc3\x85k2',
+   'Kandidatprogrammet i Matematik \xc3\x85k 2', 'antagna v\xc3\xa5rtermin',
+   'Gymnasiel\xc3\xa4rare Matematik \xc3\x85k1', '\xc3\xa5k 3'
 ]
 
 for i in ignores:
@@ -78,12 +76,14 @@ for line in lines:
 
     output += line + '\r\n'
 
-"""
-for a in unknown:
-   print repr(a)
-"""
+isFindingReplacements = False
 
-print "Content-Type: text/calendar;charset=UTF-8\r\n" + \
+if isFindingReplacements:
+   for a in unknown:
+      print repr(a)
+
+else:
+   print "Content-Type: text/calendar;charset=UTF-8\r\n" + \
         "Cache-Control: no-cache\r\n" + \
         "\r\n" + output
 
