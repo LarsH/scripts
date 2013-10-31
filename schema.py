@@ -16,7 +16,7 @@ url = baseurl + '?i=' + scramble(query)
 
 replacements = {
    'Realtidssystem': "Realtid",
-   'Kompilatorteknik I': "Kompilator",
+   'Kompilatorteknik I': "KT",
    'Laboration': 'Lab',
    'F\xc3\xb6rel\xc3\xa4sning': 'F\xc3\xb6rel',
    'ITC': 'Pol',
@@ -27,7 +27,7 @@ replacements = {
    'Vera Koponen' : 'Vera',
    'Lektion': 'Lekt',
    'Grafteori': 'GT',
-   'Diskret matematik': 'Diskret'
+   'Diskret matematik': 'DM'
   }
 
 ignores = ['Teknisk fysik 5', 'Masterprogram i datavetenskap',
