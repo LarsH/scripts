@@ -59,8 +59,13 @@ for e in s.split('\r\n'):
 
 output = ''
 unknown = set([])
-for line in lines:
 
+# Entry contains either one or three elements
+# The second element is the UID line, wich is not \r\n terminated until
+# the entry hash has been computed.
+entry = ['']
+
+for line in lines:
     # only change summary lines
     if line[:8] == 'SUMMARY:':
        fields = line[8:].split('\\, ')
@@ -71,10 +76,41 @@ for line in lines:
              unknown |= set([f])
           elif replacements[f] != '':
              line += ' ' + replacements[f]
-    elif line[:4] == 'UID:':
-        line = line +  filehash
 
-    output += line + '\r\n'
+
+    if line[:4] == 'UID:':
+        # Save away uid line, without \r\n for later
+        entry += [line, '']
+
+    elif line[:4] == 'END:':
+
+        # Don't forget the current  line
+        entry[-1] += line + '\r\n'
+
+        # Calculate entry hash if needed
+        if len(entry) == 3:
+            m = 2 ** 32
+            tohash=''.join(entry)
+            eh = '-%8.8x' % ((hash(tohash)+m)%m)
+            # Add hash and newlines to UID line
+            entry[1] += eh + '\r\n'
+            entry = [''.join(entry)]
+
+        assert len(entry) == 1
+
+        # Flush to output buffer
+        output += entry[0]
+        entry = ['']
+    elif not line.startswith("DTSTAMP:") and \
+          not line.startswith("LAST-MODIFIED:"):
+      # Save lines until whole entry is parsed
+      # Timestamp entries change on every retrieval, so don't include them in
+      # the hashing.
+      entry[-1] += line + '\r\n'
+
+assert len(entry) == 1
+# The last newline needs to be added as well
+output += entry[0]
 
 isFindingReplacements = False
 
