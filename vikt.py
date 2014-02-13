@@ -20,6 +20,10 @@ import matplotlib.dates as mdates
 # Used for BMI calculation, person length in meters
 LEN=1.84
 
+# Target data to scale plot view area
+ttarget = mdates.epoch2num(1400000000)
+vtarget = 80
+
 def saveVikt(filename, v):
         v = float(v)
         s = "%u %.1f\n" % (time.time(), v)
@@ -33,7 +37,7 @@ def convert2pdf(filename, outname):
 
    vlist = [v for t,v in l]
    tlist = [t for t,v in l]
-   vlist = [min(vlist + [80])] + vlist + [min(vlist+[80])]
+   vlist = [min(vlist + [vtarget])] + vlist + [min(vlist + [vtarget])]
    tlist = [min(tlist)] + tlist + [max(tlist)]
 
    tlist = map(mdates.epoch2num, tlist)
@@ -62,7 +66,7 @@ def convert2pdf(filename, outname):
    axkg.set_ylabel('Vikt (kg)')
 
    mint = min(tlist)
-   maxt = max(tlist)
+   maxt = max(tlist + [ttarget])
    extrat = (maxt-mint)/20
    axbmi.set_xlim(mint-extrat, maxt+extrat)
 
