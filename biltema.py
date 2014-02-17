@@ -13,6 +13,7 @@ def getPage(url):
 
 
 def priceToFloat(price):
+   price = price.contents[0]
    return float(price.replace(':','.').replace('-','0'))
 
 def searchFor(query='pump'):
@@ -37,7 +38,7 @@ def searchFor(query='pump'):
          url = BASEURL + a['href']
          item = a.contents[0]
          results += [(price, item , url)]
-      if i <= 20:
+      if i >= len(results):
          break
 
    return results
