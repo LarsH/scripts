@@ -61,6 +61,11 @@ def convert2pdf(filename, outname):
    axkg.callbacks.connect("ylim_changed", update_axbmi)
    axkg.fill(tlist,vlist,facecolor='0.8',edgecolor='0')
    axkg.plot(tlist,vlist,'k+')
+   ylim = axkg.get_ylim()
+   axkg.plot([tlist[1], ttarget], [vlist[1], vtarget], 'r--')
+   axkg.plot([tlist[1], ttarget], [vlist[1]-1, vtarget-1], 'b--')
+   axkg.plot([tlist[1], ttarget], [vlist[1]-2, vtarget-2], 'g--')
+   axkg.set_ylim(ylim)
 
    axbmi.set_ylabel('BMI')
    axkg.set_ylabel('Vikt (kg)')
