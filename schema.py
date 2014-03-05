@@ -59,38 +59,39 @@ def getLines(url):
    return lines
 
 lines = getLines(url)
-output = ''
 unknown = set([])
 
-# Entry contains either one or three elements
-# The second element is the UID line, wich is not \r\n terminated until
-# the entry hash has been computed.
-entry = ['']
+def parseCalendar(lines):
+   # Entry contains either one or three elements
+   # The second element is the UID line, wich is not \r\n terminated until
+   # the entry hash has been computed.
+   global unknown
+   output = ''
+   entry = ['']
+   for line in lines:
+      # only change summary lines
+      if line[:8] == 'SUMMARY:':
+         fields = line[8:].split('\\, ')
+         line = 'SUMMARY:'
+         for f in fields:
+            if not f in replacements:
+               line += ' ' + f
+               unknown |= set([f])
+            elif replacements[f] != '':
+               line += ' ' + replacements[f]
 
-for line in lines:
-    # only change summary lines
-    if line[:8] == 'SUMMARY:':
-       fields = line[8:].split('\\, ')
-       line = 'SUMMARY:'
-       for f in fields:
-          if not f in replacements:
-             line += ' ' + f
-             unknown |= set([f])
-          elif replacements[f] != '':
-             line += ' ' + replacements[f]
 
+      if line[:4] == 'UID:':
+         # Save away uid line, without \r\n for later
+         entry += [line, '']
 
-    if line[:4] == 'UID:':
-        # Save away uid line, without \r\n for later
-        entry += [line, '']
+      elif line[:4] == 'END:':
 
-    elif line[:4] == 'END:':
+         # Don't forget the current  line
+         entry[-1] += line + '\r\n'
 
-        # Don't forget the current  line
-        entry[-1] += line + '\r\n'
-
-        # Calculate entry hash if needed
-        if len(entry) == 3:
+         # Calculate entry hash if needed
+         if len(entry) == 3:
             m = 2 ** 32
             tohash=''.join(entry)
             eh = '-%8.8x' % ((hash(tohash)+m)%m)
@@ -98,22 +99,24 @@ for line in lines:
             entry[1] += eh + '\r\n'
             entry = [''.join(entry)]
 
-        assert len(entry) == 1
+         assert len(entry) == 1
 
-        # Flush to output buffer
-        output += entry[0]
-        entry = ['']
-    elif not line.startswith("DTSTAMP:") and \
-          not line.startswith("LAST-MODIFIED:"):
-      # Save lines until whole entry is parsed
-      # Timestamp entries change on every retrieval, so don't include them in
-      # the hashing.
-      entry[-1] += line + '\r\n'
+         # Flush to output buffer
+         output += entry[0]
+         entry = ['']
+      elif not line.startswith("DTSTAMP:") and \
+            not line.startswith("LAST-MODIFIED:"):
+         # Save lines until whole entry is parsed
+         # Timestamp entries change on every retrieval, so don't include them
+         # in the hashing.
+         entry[-1] += line + '\r\n'
 
-assert len(entry) == 1
-# The last newline needs to be added as well
-output += entry[0]
+   assert len(entry) == 1
+   # The last newline needs to be added as well
+   output += entry[0]
+   return output
 
+output = parseCalendar(lines)
 isFindingReplacements = False
 
 if isFindingReplacements:
