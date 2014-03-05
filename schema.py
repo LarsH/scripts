@@ -16,36 +16,11 @@ objects = [e for e in origrequest if 'objects' in e][0]
 query = objects + '&p=' + time
 url = baseurl + '?i=' + scramble(query)
 
-replacements = {
-   'Realtidssystem': "Realtid",
-   'Kompilatorteknik I': "KT",
-   'Laboration': 'Lab',
-   'F\xc3\xb6rel\xc3\xa4sning': 'F\xc3\xb6rel',
-   'ITC': 'Pol',
-   '\xc3\x85ngstr\xc3\xb6m': '\xc3\x85ng',
-   'Omtentamen' : 'Omtenta',
-   'Konstantinos Sagonas': 'Kostis',
-   'Martin Blomgren': 'Martin',
-   'Vera Koponen' : 'Vera',
-   'Lektion': 'Lekt',
-   'Grafteori': 'GT',
-   'Diskret matematik': 'DM'
-  }
+typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
+'F\xc3\xb6rel\xc3\xa4sning': 'F\xc3\xb6rel.'}
+campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
 
-ignores = ['Teknisk fysik 5', 'Masterprogram i datavetenskap',
-   'Informationsteknologi', 'Kandidatprogram i Datavetenskap \xc3\x85k 3 dvk',
-   '\xc3\xa5k 4', 'Grupp Sy', 'Realtidssystem I',
-   'Masterprogrammet i inbyggda system \xc3\x85r 1',
-   'Martin Stigge', 'Institutionen f\xc3\xb6r informationsteknologi',
-   'Matematiska institutionen', 'Gymnasiel\xc3\xa4rare Matematik \xc3\x85k2',
-   'Kandidatprogrammet i Matematik \xc3\x85k 2', 'antagna v\xc3\xa5rtermin',
-   'Gymnasiel\xc3\xa4rare Matematik \xc3\x85k1', '\xc3\xa5k 3'
-]
-
-for i in ignores:
-   replacements[i] = ''
-
-class Entry:
+class Entry(object):
    def __init__(self):
       self.start, self.end, self.uid = '', '', ''
       self.summary, self.location, self.description = '', '', ''
@@ -59,6 +34,18 @@ class Entry:
       eh = '-%8.8x' % ((hash(head + tail)+m)%m)
       head += eh + '\r\n'
       return head + tail
+
+   def beautify(self):
+      self.description = self.summary
+      l = self.summary.split('\, ')
+      self.summary = l[0]
+      for prev,this in zip(l,l[1:]):
+         if this in typ:
+            self.summary += ", " + typ[this]
+         elif this in campus:
+            if self.location != '':
+               self.location += ', '
+            self.location += campus[this]+prev
 
    def parseEntry(self, line):
       cmd, data = line.split(':',1)
@@ -95,7 +82,7 @@ class Entry:
       else:
          return None
 
-class Calendar:
+class Calendar(object):
    def __init__(self):
       self.entries = [] # entries are Events or strings, ending with newline
       self.handle = None
@@ -106,6 +93,10 @@ class Calendar:
    def __repr__(self):
       return "Calendar: " + repr(self.entries)
 
+   def beautify(self):
+      for e in self.entries:
+         if type(e) == Entry:
+            e.beautify()
 
    def parseLine(self, line):
       if self.handle == None:
@@ -136,9 +127,11 @@ def parseCalendar(lines):
    cal = Calendar()
    for line in lines:
       cal.parseLine(line)
-   return str(cal)
+   return cal
 
-output = parseCalendar(lines)
+cal = parseCalendar(lines)
+cal.beautify()
+output = str(cal)
 isFindingReplacements = False
 
 if isFindingReplacements:
