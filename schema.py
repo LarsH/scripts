@@ -45,20 +45,20 @@ ignores = ['Teknisk fysik 5', 'Masterprogram i datavetenskap',
 for i in ignores:
    replacements[i] = ''
 
-m = 2 ** 32
-filehash = '-%8.8x' % ((hash(open(__file__).read())+m)%m)
+def getLines(url):
+   s = urllib.urlopen(url).read()
+   s = s.replace('\r\n ', '')
 
-s = urllib.urlopen(url).read()
-s = s.replace('\r\n ', '')
+   lines = []
+   for e in s.split('\r\n'):
+      if len(e) > 0 and e[0] == ' ':
+         assert len(lines) > 0, "First line should not be a continuation"
+         lines[-1] += e[1:]
+      else:
+         lines += [e]
+   return lines
 
-lines = []
-for e in s.split('\r\n'):
-   if len(e) > 0 and e[0] == ' ':
-      assert len(lines) > 0, "First line should not be a continuation"
-      lines[-1] += e[1:]
-   else:
-      lines += [e]
-
+lines = getLines(url)
 output = ''
 unknown = set([])
 
