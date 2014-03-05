@@ -45,6 +45,65 @@ ignores = ['Teknisk fysik 5', 'Masterprogram i datavetenskap',
 for i in ignores:
    replacements[i] = ''
 
+class Entry:
+   def __init__(self):
+      self.start, self.end, self.uid = '', '', ''
+      self.summary, self.location, self.description = '', '', ''
+
+   def __str__(self):
+      head = "BEGIN:VEVENT\r\nDTSTART:%s\r\nDTEND:%s\r\nUID:%s" \
+            % (self.start, self.end, self.uid)
+      tail = "SUMMARY:%s\r\nLOCATION:%s\r\nDESCRIPTION:%s\r\nEND:VEVENT\r\n" \
+            % (self.summary, self.location, self.description)
+      m = 2 ** 32
+      eh = '-%8.8x' % ((hash(head + tail)+m)%m)
+      head += eh + '\r\n'
+      return head + tail
+
+   def parseEntry(self, line):
+      cmd, data = line.split(':',1)
+      if cmd == 'DTSTART':
+         self.start = data
+      elif cmd == 'DTEND':
+         self.end = data
+      elif cmd == 'END':
+         assert data == 'VEVENT'
+         # Entry is finished
+         return None
+      else:
+         #raise NameError(cmd)
+         pass
+      return self
+
+   @staticmethod
+   def parseNewEntry(line):
+      if line == "BEGIN:VEVENT":
+         return Entry()
+      else:
+         return None
+
+class Calendar:
+   def __init__(self):
+      self.entries = [] # entries are Events or strings, ending with newline
+      self.handle = None
+
+   def __str__(self):
+      return ''.join(map(str, self.entries))
+
+   def __repr__(self):
+      return "Calendar: " + repr(self.entries)
+
+
+   def parseLine(self, line):
+      if self.handle == None:
+         self.handle = Entry.parseNewEntry(line)
+         if self.handle != None:
+            self.entries += [self.handle]
+         else:
+            self.entries += [line + '\r\n']
+      else:
+         self.handle = self.handle.parseEntry(line)
+
 def getLines(url):
    s = urllib.urlopen(url).read()
    s = s.replace('\r\n ', '')
