@@ -13,9 +13,11 @@ objects = 'objects=253725.201,-1'
 query = objects + '&p=' + time
 url = baseurl + '?i=' + scramble(query)
 
+# Replacements
 typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
 'F\xc3\xb6rel\xc3\xa4sning': 'F\xc3\xb6rel.'}
 campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
+kurs = {'Programmering av parallelldatorer': 'PProg'}
 
 class Entry(object):
    def __init__(self):
@@ -35,7 +37,12 @@ class Entry(object):
    def beautify(self):
       self.description = self.summary
       l = self.summary.split('\, ')
-      self.summary = l[0]
+
+      if l[0] in kurs:
+         self.summary = kurs[l[0]]
+      else:
+         self.summary = l[0]
+
       for prev,this in zip(l,l[1:]):
          if this in typ:
             self.summary += ", " + typ[this]
