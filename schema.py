@@ -2,16 +2,13 @@
 import urllib
 from timeEditObfuscation import scramble, unscramble
 
-origurl = 'https://se.timeedit.net/web/uu/db1/schema/s.ics?i=6036X6695055QQ4XZ40X090Y55059W555YY5X67656661WX5X5WW90659557YX66560W604550YX5XZyQ3'
-time = '130826-140124'
-origurl = 'https://se.timeedit.net/web/uu/db1/schema/s.ics?i=yQX65X8W6Z05Q06Y5X656Z670049W6630875YQ95622X96Y8596XW5'
+baseurl = 'https://se.timeedit.net/web/uu/db1/schema/s.ics'
+
 time = '140124-140701'
-
-baseurl = origurl.split('?')[0]
-i = origurl.split('=')[-1]
-
-origrequest = unscramble(i).split('&')
-objects = [e for e in origrequest if 'objects' in e][0]
+# dirigering, pprog, pt1
+objects = 'objects=254498.201,-1,253725.201,-1,253724.201,-1'
+# pprog
+objects = 'objects=253725.201,-1'
 
 query = objects + '&p=' + time
 url = baseurl + '?i=' + scramble(query)
