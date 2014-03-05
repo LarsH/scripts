@@ -70,9 +70,22 @@ class Entry:
          assert data == 'VEVENT'
          # Entry is finished
          return None
-      else:
-         #raise NameError(cmd)
+      elif cmd == 'UID':
+         self.uid = data
+      elif cmd == 'DESCRIPTION':
+         self.description = data
+      elif cmd == 'DTSTAMP':
+         # IGNORED
          pass
+      elif cmd == 'LAST-MODIFIED':
+         # IGNORED
+         pass
+      elif cmd == 'LOCATION':
+         self.location = data
+      elif cmd == 'SUMMARY':
+         self.summary = data
+      else:
+         raise NameError(cmd)
       return self
 
    @staticmethod
