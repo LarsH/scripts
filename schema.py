@@ -5,19 +5,19 @@ from timeEditObfuscation import scramble, unscramble
 baseurl = 'https://se.timeedit.net/web/uu/db1/schema/s.ics'
 
 time = '140124-140701'
-# dirigering, pprog, pt1
-objects = 'objects=254498.201,-1,253725.201,-1,253724.201,-1'
-# pprog
-objects = 'objects=253725.201,-1'
+courses = {'PProg': 253725, 'Krypto': 253479}
+
+objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
 
 query = objects + '&p=' + time
 url = baseurl + '?i=' + scramble(query)
 
 # Replacements
 typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
-'F\xc3\xb6rel\xc3\xa4sning': 'F\xc3\xb6rel.'}
+'F\xc3\xb6rel\xc3\xa4sning': 'F\xc3\xb6rel.', 'Presentation':'Pres.'}
 campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
-kurs = {'Programmering av parallelldatorer': 'PProg'}
+kurs = {'Programmering av parallelldatorer': 'PProg',
+      'Kryptologi': 'Krypto'}
 
 class Entry(object):
    def __init__(self):
@@ -35,7 +35,7 @@ class Entry(object):
       return head + tail
 
    def beautify(self):
-      self.description = self.summary
+      self.description += self.summary
       l = self.summary.split('\, ')
 
       if l[0] in kurs:
