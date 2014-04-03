@@ -5,8 +5,8 @@ from timeEditObfuscation import scramble, unscramble
 baseurl = 'https://se.timeedit.net/web/uu/db1/schema/s.ics'
 
 time = '140124-140701'
-courses = {'PProg': 253725, 'Krypto': 253479}
-
+courses = {'PProg': 253725, 'Krypto': 253479, 'Dir': 254498, 'Berv2': 253721,\
+      'PT1': 253724, 'HPC': 253716}
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
 
 query = objects + '&p=' + time
@@ -14,10 +14,15 @@ url = baseurl + '?i=' + scramble(query)
 
 # Replacements
 typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
-'F\xc3\xb6rel\xc3\xa4sning': 'F\xc3\xb6rel.', 'Presentation':'Pres.'}
+'F\xc3\xb6rel\xc3\xa4sning': 'F\xc3\xb6rel.', 'Presentation':'Pres.',
+'Datalab': 'Lab', 'Workshop': 'Workshop', 'Workout':'Workout',
+'Probleml\xc3\xb6sning': 'Prob'}
 campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
 kurs = {'Programmering av parallelldatorer': 'PProg',
-      'Kryptologi': 'Krypto'}
+      'Kryptologi': 'Krypto',
+      'Programmeringsteknik I': 'PT1',
+      'H\xc3\xb6gprestandaber\xc3\xa4kningar och programmering': 'HPC',
+      'Ber\xc3\xa4kningsvetenskap II': 'Berv2'}
 
 class Entry(object):
    def __init__(self):
