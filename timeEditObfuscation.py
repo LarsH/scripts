@@ -140,6 +140,12 @@ def unscramble(query):
    return result
 
 if __name__ == '__main__':
+   import sys
+   print """Usage: %s [i-string]
+   Runs tests, and descrambles i-string if supplied."""%sys.argv[0]
+   if len(sys.argv) > 1:
+      print unscramble(sys.argv[1])
+
    # Test case
    s = "h=t&sid=3&p=130902-140118&objects=2625=0&types=0&fe=0"
    assert invswapChar(swapChar(s)) == s

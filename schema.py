@@ -2,6 +2,19 @@
 import urllib
 from timeEditObfuscation import scramble, unscramble
 
+
+'''
+MANUAL:
+   Ny kurs:
+   1: Kopiera schemalink:, ex: schema/s.ics?i=647QyQYZ9Z88Q5036600
+   2: python timeEditObfuscation.py 647QyQYZ9Z88Q5036600
+       -> 449508
+   3: Laegg till kurs i courses-dicten
+   4: Uppdatera tidsomfaang i time
+   5: Laegg till nya foerkortning i kurs
+   6: Laegg ev till nya typer och nytt campus i typ och campus
+"'''
+
 baseurl = 'https://se.timeedit.net/web/uu/db1/schema/s.ics'
 
 '''
@@ -11,7 +24,7 @@ courses = {'PProg': 253725, 'Krypto': 253479, 'Dir': 254498, 'Berv2': 253721,\
 '''
 
 time = '140801-150201'
-courses = {'Musikteori2': 389680, 'ModIS': 387448}
+courses = {'Musikteori2': 389680, 'ModIS': 387448, 'KKKons':449508}
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
 
@@ -29,7 +42,8 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'Programmeringsteknik I': 'PT1',
       'H\xc3\xb6gprestandaber\xc3\xa4kningar och programmering': 'HPC',
       'Ber\xc3\xa4kningsvetenskap II': 'Berv2',
-      'Modellbaserad utveckling av inbyggd programvara': 'ModIS'}
+      'Modellbaserad utveckling av inbyggd programvara': 'ModIS',
+      'Kretskortkonstruktion med ECAD-verktyg': 'KKKons'}
 
 class Entry(object):
    def __init__(self):
@@ -70,7 +84,7 @@ class Entry(object):
       elif cmd == 'DTEND':
          self.end = data
       elif cmd == 'END':
-         assert data == 'VEVENT'
+         assert data == 'VEVENT', repr(data)
          # Entry is finished
          return None
       elif cmd == 'UID':
@@ -126,15 +140,16 @@ class Calendar(object):
 
 def getLines(url):
    s = urllib.urlopen(url).read()
-   s = s.replace('\r\n ', '')
-
+   s = s.replace('\r','\n') # The server seems to use both CRLF and LF
+   s = s.replace('\n \n', '\n')
    lines = []
-   for e in s.split('\r\n'):
-      if len(e) > 0 and e[0] == ' ':
-         assert len(lines) > 0, "First line should not be a continuation"
-         lines[-1] += e[1:]
-      else:
-         lines += [e]
+   for e in s.split('\n'):
+      if len(e) > 0:
+         if e[0] == ' ':
+            assert len(lines) > 0, "First line should not be a continuation"
+            lines[-1] += e[1:]
+         else:
+            lines += [e]
    return lines
 
 lines = getLines(url)
