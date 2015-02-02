@@ -21,10 +21,13 @@ baseurl = 'https://se.timeedit.net/web/uu/db1/schema/s.ics'
 time = '140124-140701'
 courses = {'PProg': 253725, 'Krypto': 253479, 'Dir': 254498, 'Berv2': 253721,\
       'PT1': 253724, 'HPC': 253716}
-'''
 
 time = '140801-150201'
 courses = {'Musikteori2': 389680, 'ModIS': 387448, 'KKKons':449508}
+'''
+
+time = '150101-150831'
+courses = {'a': 871362, 'b': 388019, 'c': 389664}
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
 
@@ -43,7 +46,9 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'H\xc3\xb6gprestandaber\xc3\xa4kningar och programmering': 'HPC',
       'Ber\xc3\xa4kningsvetenskap II': 'Berv2',
       'Modellbaserad utveckling av inbyggd programvara': 'ModIS',
-      'Kretskortkonstruktion med ECAD-verktyg': 'KKKons'}
+      'Kretskortkonstruktion med ECAD-verktyg': 'KKKons',
+      'Programmering av enkapseldatorer':'uCprog',
+      'Elektromekaniskt projekt':'ElMekProj'}
 
 class Entry(object):
    def __init__(self):
