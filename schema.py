@@ -27,7 +27,8 @@ courses = {'Musikteori2': 389680, 'ModIS': 387448, 'KKKons':449508}
 '''
 
 time = '150101-150831'
-courses = {'a': 871362, 'b': 388019, 'c': 389664, 'sysoperanalys':871314}
+courses = {'a': 871362, 'b': 388019, 'c': 389664, 'sysoperanalys':871314,\
+      'KAnalys':387815}
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
 
@@ -49,7 +50,8 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'Kretskortkonstruktion med ECAD-verktyg': 'KKKons',
       'Programmering av enkapseldatorer':'uCprog',
       'Elektromekaniskt projekt':'ElMekProj',
-      'System- och operationsanalys':'SysOpAn'}
+      'System- och operationsanalys':'SysOpAn',
+      'Komplex analys':'KAnalys'}
 
 class Entry(object):
    def __init__(self):
