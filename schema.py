@@ -24,11 +24,17 @@ courses = {'PProg': 253725, 'Krypto': 253479, 'Dir': 254498, 'Berv2': 253721,\
 
 time = '140801-150201'
 courses = {'Musikteori2': 389680, 'ModIS': 387448, 'KKKons':449508}
-'''
 
 time = '150101-150831'
 courses = {'a': 871362, 'b': 388019, 'c': 389664, 'sysoperanalys':871314,\
       'KAnalys':387815}
+'''
+
+time = '150801-160129'
+courses = { 'a' : 978650
+      ,'b' : 1046835
+      ,'c' : 1004077 # Extrema miljoer
+      } 
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
 
@@ -39,7 +45,9 @@ url = baseurl + '?i=' + scramble(query)
 typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
 'F\xc3\xb6rel\xc3\xa4sning': 'F\xc3\xb6rel.', 'Presentation':'Pres.',
 'Datalab': 'Lab', 'Workshop': 'Workshop', 'Workout':'Workout',
-'Probleml\xc3\xb6sning': 'Prob'}
+'Probleml\xc3\xb6sning': 'Prob', 'studiebes\xc3\xb6k':'Studiebes\xc3\xb6k',
+'Seminarium':'Seminarium', 'Lektion': 'Lekt.',
+'Handledning datorer': 'DataPropp', 'Dugga':'Dugga'}
 campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
 kurs = {'Programmering av parallelldatorer': 'PProg',
       'Kryptologi': 'Krypto',
@@ -51,12 +59,57 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'Programmering av enkapseldatorer':'uCprog',
       'Elektromekaniskt projekt':'ElMekProj',
       'System- och operationsanalys':'SysOpAn',
-      'Komplex analys':'KAnalys'}
+      'Komplex analys':'KAnalys',
+      'Introduktion till teknisk fysik':'IntroF',
+      'Elektromagnetisk f\xc3\xa4ltteori': 'EMFT',
+      'Elektronik i extrema milj\xc3\xb6er':'ExtrEl'
+      }
+rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
+      'Polhemsalen':'Polhem'}
+
+lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva']
+
+stringclasses = ['typ', 'campus', 'kurs', 'rum', 'instution', 'lecturer',\
+      'program', 'group']
+
+def classify(s):
+   c = None
+   if s in typ:
+      assert c == None
+      c = stringclasses.index('typ')
+   elif s in campus:
+      assert c == None
+      c = stringclasses.index('campus')
+   elif s in kurs:
+      assert c == None
+      c = stringclasses.index('kurs')
+   elif s.isdigit() or s in rum or s.replace('K','').isdigit():
+      assert c == None
+      c = stringclasses.index('rum')
+   elif s.startswith('Institutionen f\xc3\xb6r'):
+      assert c == None
+      c = stringclasses.index('instution')
+   elif s in lecturers:
+      assert c == None
+      c = stringclasses.index('lecturer')
+   elif s.startswith('Masterprogram') or s.startswith('Kandidatprogram') or\
+         s.startswith('Teknisk fysik ') or\
+         s.startswith('Civilingenj\xc3\xb6rsprogrammet'):
+      assert c == None
+      c = stringclasses.index('program')
+   elif s.startswith('Grupp ') or s.startswith('\xc3\xa5k '):
+      assert c == None
+      c = stringclasses.index('group')
+
+   assert c != None, "Could not determine class for:" + repr(s)
+   return c
+
 
 class Entry(object):
    def __init__(self):
       self.start, self.end, self.uid = '', '', ''
       self.summary, self.location, self.description = '', '', ''
+      self.isBeautified = False
 
    def __str__(self):
       head = "BEGIN:VEVENT\r\nDTSTART:%s\r\nDTEND:%s\r\nUID:%s" \
@@ -69,21 +122,38 @@ class Entry(object):
       return head + tail
 
    def beautify(self):
+      if self.isBeautified:
+         return
+      self.isBeautified = True
+
       self.description += self.summary
       l = self.summary.split('\, ')
+      self.summary = ''
+      l = list(set(l))
 
-      if l[0] in kurs:
-         self.summary = kurs[l[0]]
-      else:
-         self.summary = l[0]
+      cl = map(classify, l)
 
-      for prev,this in zip(l,l[1:]):
-         if this in typ:
-            self.summary += ", " + typ[this]
-         elif this in campus:
-            if self.location != '':
-               self.location += ', '
-            self.location += campus[this]+prev
+      summarylist = []
+      for s, c in zip(l, cl):
+         if stringclasses.index('kurs') == c:
+            summarylist += [kurs[s]]
+      for s, c in zip(l, cl):
+         if stringclasses.index('typ') == c:
+            summarylist += [typ[s]]
+      self.summary = ', '.join(summarylist)
+
+      assert self.location == '', repr(self.location)
+
+      for s, c in zip(l, cl):
+         if stringclasses.index('campus') == c:
+            self.location += campus[s]
+      rooms = []
+      for s, c in zip(l, cl):
+         if stringclasses.index('rum') == c:
+            if s in rum:
+               s = rum[s]
+            rooms += [s]
+      self.location += '/'.join(rooms)
 
    def parseEntry(self, line):
       cmd, data = line.split(':',1)
@@ -160,14 +230,14 @@ def getLines(url):
             lines += [e]
    return lines
 
-lines = getLines(url)
-
 def parseCalendar(lines):
    cal = Calendar()
    for line in lines:
       cal.parseLine(line)
    return cal
 
+
+lines = getLines(url)
 cal = parseCalendar(lines)
 cal.beautify()
 output = str(cal)
