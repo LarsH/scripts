@@ -34,7 +34,8 @@ time = '150801-160129'
 courses = { 'a' : 978650
       ,'b' : 1046835
       ,'c' : 1004077 # Extrema miljoer
-      } 
+      ,'d' : 909616 # Algebra Geometri
+      }
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
 
@@ -62,12 +63,24 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'Komplex analys':'KAnalys',
       'Introduktion till teknisk fysik':'IntroF',
       'Elektromagnetisk f\xc3\xa4ltteori': 'EMFT',
-      'Elektronik i extrema milj\xc3\xb6er':'ExtrEl'
+      'Elektronik i extrema milj\xc3\xb6er':'ExtrEl',
+      'Algebra och geometri':"AlGeo"
       }
 rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
-      'Polhemsalen':'Polhem'}
+      'Polhemsalen':'Polhem',\
+      '\xc3\x85ng/73121: Oseenska rummet (Internt rum f\xc3\xb6r FysAst)': '73121',
+      'F\xc3\xb6r tid och plats se studentportalen': 'TBD',
+'Siegbahnsalen': 'Siegbahn',
+'Hus 6': 'Hus 6',
+'Aula' : 'Aula',
+'B8\\,BMC': 'BMC:B8'
+}
 
-lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva']
+lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva',
+      'Lennart \xc3\x85hl\xc3\xa9n', 'Cecilia Holmgren', 'Martin Herschend',
+      'Jian Qiu', 'Helena Jonsson', 'Niklas Fejes','Viktoria Veselic',
+      'Oleg Shebanits'
+      ]
 
 stringclasses = ['typ', 'campus', 'kurs', 'rum', 'instution', 'lecturer',\
       'program', 'group']
@@ -86,7 +99,8 @@ def classify(s):
    elif s.isdigit() or s in rum or s.replace('K','').isdigit():
       assert c == None
       c = stringclasses.index('rum')
-   elif s.startswith('Institutionen f\xc3\xb6r'):
+   elif s.startswith('Institutionen f\xc3\xb6r ') or\
+         s.endswith(' institutionen'):
       assert c == None
       c = stringclasses.index('instution')
    elif s in lecturers:
@@ -94,14 +108,17 @@ def classify(s):
       c = stringclasses.index('lecturer')
    elif s.startswith('Masterprogram') or s.startswith('Kandidatprogram') or\
          s.startswith('Teknisk fysik ') or\
-         s.startswith('Civilingenj\xc3\xb6rsprogrammet'):
+         s.startswith('Civilingenj\xc3\xb6rsprogrammet') or\
+         s in [ 'Energisystem', 'Milj\xc3\xb6- och vattenteknik']:
+
       assert c == None
       c = stringclasses.index('program')
    elif s.startswith('Grupp ') or s.startswith('\xc3\xa5k '):
       assert c == None
       c = stringclasses.index('group')
 
-   assert c != None, "Could not determine class for:" + repr(s)
+   if c == None:
+      print "Could not determine class for:" + repr(s)
    return c
 
 
@@ -132,6 +149,8 @@ class Entry(object):
       l = list(set(l))
 
       cl = map(classify, l)
+      if None in cl:
+         assert False, "Beskrivning: %r" % self.description
 
       summarylist = []
       for s, c in zip(l, cl):
