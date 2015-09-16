@@ -33,4 +33,4 @@ psselect -r $AAA/2.ps $AAA/3.ps  || exit
 ps2pdf $AAA/3.ps $AAA/toPrint.pdf || exit
 
 # Print document with automatic folding and stapling
-lp -o "Duplex=DuplexTumble InputSlot=Auto number-up=2 number-up-layout=rltb PageSize=A4 StapleLocation=CenterW" $AAA/toPrint.pdf
+lp -d MP4500-DSm745e -o "Duplex=DuplexTumble InputSlot=Auto number-up=2 number-up-layout=rltb PageSize=A4 StapleLocation=CenterW" $AAA/toPrint.pdf
