@@ -31,10 +31,12 @@ courses = {'a': 871362, 'b': 388019, 'c': 389664, 'sysoperanalys':871314,\
 '''
 
 time = '150801-160129'
-courses = { 'a' : 978650
-      ,'b' : 1046835
+courses = { 'a' : 978650 # EMFT
+      ,'b' : 1046835 # introF ?
       ,'c' : 1004077 # Extrema miljoer
       ,'d' : 909616 # Algebra Geometri
+      ,'e' : 1004215 # analog elektronik
+      ,'f' : 1004079 # ECAD 1
       }
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
@@ -48,7 +50,10 @@ typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
 'Datalab': 'Lab', 'Workshop': 'Workshop', 'Workout':'Workout',
 'Probleml\xc3\xb6sning': 'Prob', 'studiebes\xc3\xb6k':'Studiebes\xc3\xb6k',
 'Seminarium':'Seminarium', 'Lektion': 'Lekt.',
-'Handledning datorer': 'DataPropp', 'Dugga':'Dugga'}
+'Handledning datorer': 'DataPropp', 'Dugga':'Dugga',
+'\xc3\x96vning':'\xc3\x96vning', 'Introduktion':'Intro'
+}
+
 campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
 kurs = {'Programmering av parallelldatorer': 'PProg',
       'Kryptologi': 'Krypto',
@@ -64,7 +69,9 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'Introduktion till teknisk fysik':'IntroF',
       'Elektromagnetisk f\xc3\xa4ltteori': 'EMFT',
       'Elektronik i extrema milj\xc3\xb6er':'ExtrEl',
-      'Algebra och geometri':"AlGeo"
+      'Algebra och geometri':"AlGeo",
+      'Analog elektronik': "AnEl",
+      'Projekt i digital elektronikkonstruktion':'DigitalProj'
       }
 rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
       'Polhemsalen':'Polhem',\
@@ -73,13 +80,15 @@ rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
 'Siegbahnsalen': 'Siegbahn',
 'Hus 6': 'Hus 6',
 'Aula' : 'Aula',
-'B8\\,BMC': 'BMC:B8'
+'B8\\,BMC': 'BMC:B8',
+'Datasal 4103':'4103'
 }
 
 lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva',
       'Lennart \xc3\x85hl\xc3\xa9n', 'Cecilia Holmgren', 'Martin Herschend',
       'Jian Qiu', 'Helena Jonsson', 'Niklas Fejes','Viktoria Veselic',
-      'Oleg Shebanits'
+      'Oleg Shebanits', 'J\xc3\xb6rgen Olsson', 'Pawel Marciniewski',
+      'Leif Gustafsson','Magnus Jobs'
       ]
 
 stringclasses = ['typ', 'campus', 'kurs', 'rum', 'instution', 'lecturer',\
