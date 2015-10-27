@@ -55,13 +55,19 @@ typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
 }
 
 campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
+
+
+
+'''
+Kursfoerkortningar. Foer att ignorera en kurs, saett den till tomma straengen
+'''
 kurs = {'Programmering av parallelldatorer': 'PProg',
       'Kryptologi': 'Krypto',
       'Programmeringsteknik I': 'PT1',
       'H\xc3\xb6gprestandaber\xc3\xa4kningar och programmering': 'HPC',
       'Ber\xc3\xa4kningsvetenskap II': 'Berv2',
       'Modellbaserad utveckling av inbyggd programvara': 'ModIS',
-      'Kretskortkonstruktion med ECAD-verktyg': 'KKKons',
+      'Kretskortkonstruktion med ECAD-verktyg': 'PCB-CAD',
       'Programmering av enkapseldatorer':'uCprog',
       'Elektromekaniskt projekt':'ElMekProj',
       'System- och operationsanalys':'SysOpAn',
@@ -71,7 +77,7 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'Elektronik i extrema milj\xc3\xb6er':'ExtrEl',
       'Algebra och geometri':"AlGeo",
       'Analog elektronik': "AnEl",
-      'Projekt i digital elektronikkonstruktion':'DigitalProj'
+      'Projekt i digital elektronikkonstruktion':''
       }
 rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
       'Polhemsalen':'Polhem',\
@@ -163,7 +169,9 @@ class Entry(object):
 
       summarylist = []
       for s, c in zip(l, cl):
-         if stringclasses.index('kurs') == c:
+         if stringclasses.index('kurs') == c and kurs[s] != '':
+            # Some events are shared between several courses,
+            # Don't add irrellevant courses to the description
             summarylist += [kurs[s]]
       for s, c in zip(l, cl):
          if stringclasses.index('typ') == c:
