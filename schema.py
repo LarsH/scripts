@@ -37,6 +37,9 @@ courses = { 'a' : 978650 # EMFT
       ,'d' : 909616 # Algebra Geometri
       ,'e' : 1004215 # analog elektronik
       ,'f' : 1004079 # ECAD 1
+      ,'g' : 1004197 # signalbehandling
+      ,'h' : 1004086 # Termo, fraagor
+      ,'i' : 1004085 # Termo, foerlasningar
       }
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
@@ -51,7 +54,9 @@ typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
 'Probleml\xc3\xb6sning': 'Prob', 'studiebes\xc3\xb6k':'Studiebes\xc3\xb6k',
 'Seminarium':'Seminarium', 'Lektion': 'Lekt.',
 'Handledning datorer': 'DataPropp', 'Dugga':'Dugga',
-'\xc3\x96vning':'\xc3\x96vning', 'Introduktion':'Intro'
+'\xc3\x96vning':'\xc3\x96vning', 'Introduktion':'Intro',
+'Obligatorisk n\xc3\xa4rvaro': 'OBLIGATORISKT',
+'Redovisning':'Redov.','Fr\xc3\xa5gestund':'QA'
 }
 
 campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
@@ -77,7 +82,9 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'Elektronik i extrema milj\xc3\xb6er':'ExtrEl',
       'Algebra och geometri':"AlGeo",
       'Analog elektronik': "AnEl",
-      'Projekt i digital elektronikkonstruktion':''
+      'Projekt i digital elektronikkonstruktion':'',
+      'Signalbehandling': 'SigBH',
+      'Teknisk termodynamik':'Termo'
       }
 rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
       'Polhemsalen':'Polhem',\
@@ -87,14 +94,16 @@ rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
 'Hus 6': 'Hus 6',
 'Aula' : 'Aula',
 'B8\\,BMC': 'BMC:B8',
-'Datasal 4103':'4103'
+'Datasal 4103':'4103',
+'V\xc3\xa4rmel\xc3\xa4ralab':'V\xc3\xa4rmelab'
 }
 
 lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva',
       'Lennart \xc3\x85hl\xc3\xa9n', 'Cecilia Holmgren', 'Martin Herschend',
       'Jian Qiu', 'Helena Jonsson', 'Niklas Fejes','Viktoria Veselic',
       'Oleg Shebanits', 'J\xc3\xb6rgen Olsson', 'Pawel Marciniewski',
-      'Leif Gustafsson','Magnus Jobs'
+      'Leif Gustafsson','Magnus Jobs','Subhrakanti Dey','Matthias Weiszflog',
+      'Sebastian George'
       ]
 
 stringclasses = ['typ', 'campus', 'kurs', 'rum', 'instution', 'lecturer',\
@@ -111,7 +120,8 @@ def classify(s):
    elif s in kurs:
       assert c == None
       c = stringclasses.index('kurs')
-   elif s.isdigit() or s in rum or s.replace('K','').isdigit():
+   elif s.isdigit() or s in rum or s.replace('K','').isdigit() or\
+         s.replace('b','').isdigit():
       assert c == None
       c = stringclasses.index('rum')
    elif s.startswith('Institutionen f\xc3\xb6r ') or\
@@ -124,7 +134,9 @@ def classify(s):
    elif s.startswith('Masterprogram') or s.startswith('Kandidatprogram') or\
          s.startswith('Teknisk fysik ') or\
          s.startswith('Civilingenj\xc3\xb6rsprogrammet') or\
-         s in [ 'Energisystem', 'Milj\xc3\xb6- och vattenteknik']:
+         s in [ 'Energisystem',
+               'Milj\xc3\xb6- och vattenteknik',
+               'Informationsteknologi' ]:
 
       assert c == None
       c = stringclasses.index('program')
@@ -160,11 +172,18 @@ class Entry(object):
 
       self.description += self.summary
       l = self.summary.split('\, ')
-      self.summary = ''
       l = list(set(l))
+
+      # Ugly hack for '\xc3\x85ngstr\xc3\xb6m 8K1117'
+      for i,s in enumerate(l):
+         for c in campus:
+            if c+' ' in s:
+               l[i] = c
+               l += [s.replace(c+' ','')]
 
       cl = map(classify, l)
       if None in cl:
+         print self.summary
          assert False, "Beskrivning: %r" % self.description
 
       summarylist = []
