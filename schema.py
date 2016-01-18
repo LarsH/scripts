@@ -279,6 +279,14 @@ class Calendar(object):
          if type(e) == Entry:
             e.beautify()
 
+
+   def removeMatching(self, f):
+      '''
+      Remove calender entries for wich f returns true
+      f : Entry -> boolean
+      '''
+      self.entries = filter(lambda x: not f(x), self.entries)
+
    def parseLine(self, line):
       if self.handle == None:
          self.handle = Entry.parseNewEntry(line)
@@ -309,10 +317,24 @@ def parseCalendar(lines):
       cal.parseLine(line)
    return cal
 
+def mekanikEjLab(entry):
+   'return true if entry is mekanik entry, but not a lab'
+
+   # Check valid type
+   if type(entry) != Entry:
+      return False
+
+   s = entry.summary.lower()
+   t = ('mek' in s) and not ('lab' in s or 'redov' in s)
+   #if t:
+   #   print "Removed", s
+   return t
+
 
 lines = getLines(url)
 cal = parseCalendar(lines)
 cal.beautify()
+cal.removeMatching(mekanikEjLab)
 output = str(cal)
 isFindingReplacements = False
 
