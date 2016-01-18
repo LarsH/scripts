@@ -48,6 +48,7 @@ courses = { 'a': 981415 # mekanik baskurs
       ,'c': 1070810 # kexjobb F
       ,'d': 1070807 # digital kommunikation
       ,'e': 1070780 # EMC
+      ,'f': 1070722 # teknisk termodynamik
       }
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
@@ -64,7 +65,9 @@ typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
 'Handledning datorer': 'DataPropp', 'Dugga':'Dugga',
 '\xc3\x96vning':'\xc3\x96vning', 'Introduktion':'Intro',
 'Obligatorisk n\xc3\xa4rvaro': 'OBLIGATORISKT',
-'Redovisning':'Redov.','Fr\xc3\xa5gestund':'QA'
+'Redovisning':'Redov.','Fr\xc3\xa5gestund':'QA',
+'Lablektion':'LabLekt',
+'Hemtenta':'Hemtenta'
 }
 
 campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
@@ -107,9 +110,7 @@ rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
 'B8\\,BMC': 'BMC:B8',
 'Datasal 4103':'4103',
 'V\xc3\xa4rmel\xc3\xa4ralab':'V\xc3\xa4rmelab',
-'Mekaniklab':'MekLab',
-'Lablektion':'LabLekt',
-'Hemtenta':'Hemtenta'
+'Mekaniklab':'MekLab'
 }
 
 lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva',
@@ -119,7 +120,8 @@ lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva',
       'Leif Gustafsson','Magnus Jobs','Subhrakanti Dey','Matthias Weiszflog',
       'Sebastian George','Ulf Danielsson','Mattias Klintenberg',
       'Jacob Winding','Paul Barklem','Mattias Ellert','Anders Bergman',
-      'Andrzej Kupsc','Thiemo Voigt','Mikael Sternad'
+      'Andrzej Kupsc','Thiemo Voigt','Mikael Sternad','Cecilia Gustavsson',
+      'Sotirios Droulias','Ralph Scheicher','Federico Binda','Jacob Eriksson'
       ]
 
 stringclasses = ['typ', 'campus', 'kurs', 'rum', 'instution', 'lecturer',\
