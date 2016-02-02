@@ -49,6 +49,8 @@ courses = { 'a': 981415 # mekanik baskurs
       ,'d': 1070807 # digital kommunikation
       ,'e': 1070780 # EMC
       ,'f': 1070722 # teknisk termodynamik
+      ,'g': 979119  # Berv2
+      ,'h': 979123  # Berv3
       }
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
@@ -67,7 +69,9 @@ typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
 'Obligatorisk n\xc3\xa4rvaro': 'OBLIGATORISKT',
 'Redovisning':'Redov.','Fr\xc3\xa5gestund':'QA',
 'Lablektion':'LabLekt',
-'Hemtenta':'Hemtenta'
+'Hemtenta':'Hemtenta',
+'Handledning':'Handledning',
+'Projekt':'Projekt'
 }
 
 campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
@@ -98,7 +102,10 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'Teknisk termodynamik':'Termo',
       'Mekanik baskurs':'Mek1',
       'Digital kommunikation':'DigKom',
-      'Internet of Things':'IoT'
+      'Internet of Things':'IoT',
+      'Ber\xc3\xa4kningsvetenskap III':'Berv3',
+      'Ber\xc3\xa4kningsvetenskap II':'Berv2'
+
       }
 rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
       'Polhemsalen':'Polhem',\
@@ -121,7 +128,9 @@ lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva',
       'Sebastian George','Ulf Danielsson','Mattias Klintenberg',
       'Jacob Winding','Paul Barklem','Mattias Ellert','Anders Bergman',
       'Andrzej Kupsc','Thiemo Voigt','Mikael Sternad','Cecilia Gustavsson',
-      'Sotirios Droulias','Ralph Scheicher','Federico Binda','Jacob Eriksson'
+      'Sotirios Droulias','Ralph Scheicher','Federico Binda','Jacob Eriksson',
+      'Per L\xc3\xb6tstedt','Lina von Sydow','Stefan Engblom','Sonja Mathias',
+      'Mikhail Poluektov'
       ]
 
 stringclasses = ['typ', 'campus', 'kurs', 'rum', 'instution', 'lecturer',\
@@ -154,6 +163,7 @@ def classify(s):
          s.startswith('Civilingenj\xc3\xb6rsprogrammet') or\
          s in [ 'Energisystem',
                'Milj\xc3\xb6- och vattenteknik',
+               'Kemiteknik',
                'Informationsteknologi' ]:
 
       assert c == None
@@ -330,11 +340,26 @@ def mekanikEjLab(entry):
    #   print "Removed", s
    return t
 
+def bervForel(entry):
+   'return true if entry is a berv entry, and a lecture'
+
+   # Check valid type
+   if type(entry) != Entry:
+      return False
+
+   s = entry.summary.lower()
+   t = ('berv' in s) and (('lab' in s) or ('f\xc3\xb6rel' in s))
+   #if t:
+   #   print "Removed", s
+   return t
+
+
 
 lines = getLines(url)
 cal = parseCalendar(lines)
 cal.beautify()
 cal.removeMatching(mekanikEjLab)
+cal.removeMatching(bervForel)
 output = str(cal)
 isFindingReplacements = False
 
