@@ -47,7 +47,7 @@ courses = { 'a': 981415 # mekanik baskurs
       ,'b': 978601 # internet of things
       ,'c': 1070810 # kexjobb F
       ,'d': 1070807 # digital kommunikation
-      ,'e': 1070780 # EMC
+      #,'e': 1070780 # EMC
       ,'f': 1070722 # teknisk termodynamik
       ,'g': 979119  # Berv2
       ,'h': 979123  # Berv3
@@ -104,8 +104,8 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'Digital kommunikation':'DigKom',
       'Internet of Things':'IoT',
       'Ber\xc3\xa4kningsvetenskap III':'Berv3',
-      'Ber\xc3\xa4kningsvetenskap II':'Berv2'
-
+      'Ber\xc3\xa4kningsvetenskap II':'Berv2',
+      'Sj\xc3\xa4lvst\xc3\xa4ndigt arbete i teknisk fysik':'KEX'
       }
 rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
       'Polhemsalen':'Polhem',\
@@ -130,7 +130,7 @@ lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva',
       'Andrzej Kupsc','Thiemo Voigt','Mikael Sternad','Cecilia Gustavsson',
       'Sotirios Droulias','Ralph Scheicher','Federico Binda','Jacob Eriksson',
       'Per L\xc3\xb6tstedt','Lina von Sydow','Stefan Engblom','Sonja Mathias',
-      'Mikhail Poluektov'
+      'Mikhail Poluektov', 'Martin Sj\xc3\xb6din', 'Sonja Entzenberg'
       ]
 
 stringclasses = ['typ', 'campus', 'kurs', 'rum', 'instution', 'lecturer',\
