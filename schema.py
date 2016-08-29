@@ -28,7 +28,6 @@ courses = {'Musikteori2': 389680, 'ModIS': 387448, 'KKKons':449508}
 time = '150101-150831'
 courses = {'a': 871362, 'b': 388019, 'c': 389664, 'sysoperanalys':871314,\
       'KAnalys':387815}
-'''
 
 time = '150801-160129'
 courses = { 'a' : 978650 # EMFT
@@ -52,6 +51,12 @@ courses = { 'a': 981415 # mekanik baskurs
       ,'g': 979119  # Berv2
       ,'h': 979123  # Berv3
       }
+'''
+
+time = '160808-170131'
+courses = { 'a': 1157976 # Reglerteknik III
+      ,'b': 1220492 # Foerdjupning inbyggda system
+}
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
 
@@ -71,7 +76,8 @@ typ = {'Tentamen': 'Tenta', 'Omtentamen': 'Omtenta', 'Laboration':'Lab',
 'Lablektion':'LabLekt',
 'Hemtenta':'Hemtenta',
 'Handledning':'Handledning',
-'Projekt':'Projekt'
+'Projekt':'Projekt',
+'R\xc3\xa4knestuga':'Lekt'
 }
 
 campus = { 'ITC': 'Pol:', '\xc3\x85ngstr\xc3\xb6m':'\xc3\x85ng:'}
@@ -105,7 +111,9 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       'Internet of Things':'IoT',
       'Ber\xc3\xa4kningsvetenskap III':'Berv3',
       'Ber\xc3\xa4kningsvetenskap II':'Berv2',
-      'Sj\xc3\xa4lvst\xc3\xa4ndigt arbete i teknisk fysik':'KEX'
+      'Sj\xc3\xa4lvst\xc3\xa4ndigt arbete i teknisk fysik':'KEX',
+      'Reglerteknik III':'RT3',
+      '\xc3\x96ppen f\xc3\xb6rdjupningskurs i inbyggda system':'IProj'
       }
 rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
       'Polhemsalen':'Polhem',\
@@ -115,6 +123,7 @@ rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
 'Hus 6': 'Hus 6',
 'Aula' : 'Aula',
 'B8\\,BMC': 'BMC:B8',
+'B42\\,BMC': 'BMC:B42',
 'Datasal 4103':'4103',
 'V\xc3\xa4rmel\xc3\xa4ralab':'V\xc3\xa4rmelab',
 'Mekaniklab':'MekLab'
@@ -130,7 +139,8 @@ lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva',
       'Andrzej Kupsc','Thiemo Voigt','Mikael Sternad','Cecilia Gustavsson',
       'Sotirios Droulias','Ralph Scheicher','Federico Binda','Jacob Eriksson',
       'Per L\xc3\xb6tstedt','Lina von Sydow','Stefan Engblom','Sonja Mathias',
-      'Mikhail Poluektov', 'Martin Sj\xc3\xb6din', 'Sonja Entzenberg'
+      'Mikhail Poluektov', 'Martin Sj\xc3\xb6din', 'Sonja Entzenberg',
+      'Andreas Svensson', 'Thomas Sch\xc3\xb6n'
       ]
 
 stringclasses = ['typ', 'campus', 'kurs', 'rum', 'instution', 'lecturer',\
