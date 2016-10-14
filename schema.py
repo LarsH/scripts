@@ -56,6 +56,7 @@ courses = { 'a': 981415 # mekanik baskurs
 time = '160808-170131'
 courses = { 'a': 1157976 # Reglerteknik III
       ,'b': 1220492 # Foerdjupning inbyggda system
+      ,'c': 1220378 # ECAD
 }
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
