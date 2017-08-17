@@ -51,13 +51,17 @@ courses = { 'a': 981415 # mekanik baskurs
       ,'g': 979119  # Berv2
       ,'h': 979123  # Berv3
       }
-'''
 
 time = '160808-170131'
 courses = { 'a': 1157976 # Reglerteknik III
       ,'b': 1220492 # Foerdjupning inbyggda system
       ,'c': 1220378 # ECAD
       ,'d': 1220491 # projektkurs inbyggda system
+}
+'''
+
+time = '170701-171231'
+courses = { 'a': 1955308 # Spektral signalbehandling
 }
 
 objects = 'objects=' + ','.join(['%u.201,-1'%courses[c] for c in courses])
@@ -118,6 +122,7 @@ kurs = {'Programmering av parallelldatorer': 'PProg',
       '\xc3\x96ppen f\xc3\xb6rdjupningskurs i inbyggda system':'IProj',
       'Projekt i elektroteknik':'',
       'Projekt i inbyggda system':'IProj'
+      ,'Spektral signalbehandling':'SpekSig'
       }
 rum = {'H\xc3\xa4ggsalen':'H\xc3\xa4gg', 'Datorsal': 'Datorsal',\
       'Polhemsalen':'Polhem',\
@@ -145,6 +150,7 @@ lecturers = ['Andris Vaivads', 'Cecilia Norgren','Irina Dolguntseva',
       'Per L\xc3\xb6tstedt','Lina von Sydow','Stefan Engblom','Sonja Mathias',
       'Mikhail Poluektov', 'Martin Sj\xc3\xb6din', 'Sonja Entzenberg',
       'Andreas Svensson', 'Thomas Sch\xc3\xb6n', 'Ping Wu'
+      ,'Marcus Bj\xc3\xb6rk'
       ]
 
 stringclasses = ['typ', 'campus', 'kurs', 'rum', 'instution', 'lecturer',\
